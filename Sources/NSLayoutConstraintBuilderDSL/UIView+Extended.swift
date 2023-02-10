@@ -8,7 +8,8 @@
 import UIKit
 
 public extension UIView {
-    @NSLayoutConstraintArrayBuilder func constrain(edges: NSDirectionalRectEdge, to other: UIView, withInsets insets: NSDirectionalEdgeInsets = .zero) -> [NSLayoutConstraint] {
+    @NSLayoutConstraintArrayBuilder
+    func constrain(edges: NSDirectionalRectEdge = .all, to other: AnchorPoint, withInsets insets: NSDirectionalEdgeInsets = .zero) -> [NSLayoutConstraint] {
         if edges.contains(.top) {
             topAnchor.constraint(equalTo: other.topAnchor, constant: insets.top)
         }

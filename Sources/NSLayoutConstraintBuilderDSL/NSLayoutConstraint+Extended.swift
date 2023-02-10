@@ -9,8 +9,8 @@ import class UIKit.NSLayoutConstraint
 
 public extension NSLayoutConstraint {
     @discardableResult
-    static func activate(@NSLayoutConstraintArrayBuilder makeConstraints: () -> [NSLayoutConstraint]) -> [NSLayoutConstraint] {
-        let constraints = makeConstraints()
+    static func activate(@NSLayoutConstraintArrayBuilder builder: () -> [NSLayoutConstraint]) -> [NSLayoutConstraint] {
+        let constraints = builder()
         activate(constraints)
         return constraints
     }

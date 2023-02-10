@@ -7,44 +7,45 @@
 
 import class UIKit.NSLayoutConstraint
 
-@resultBuilder public enum NSLayoutConstraintArrayBuilder {
-    public static func buildBlock(_ components: [NSLayoutConstraint]...) -> [NSLayoutConstraint] {
-        components.flatMap { $0 }
+@resultBuilder
+public enum NSLayoutConstraintArrayBuilder {
+    public static func buildBlock(_ definitions: [any LayoutConstraintDefinition]...) -> [any LayoutConstraintDefinition] {
+        definitions.flatMap { $0 }
     }
 
-    public static func buildExpression(_ expression: NSLayoutConstraint) -> [NSLayoutConstraint] {
-        [expression]
+    public static func buildExpression(_ definition: some LayoutConstraintDefinition) -> [any LayoutConstraintDefinition] {
+        [definition]
     }
 
-    public static func buildExpression(_ expression: [NSLayoutConstraint]) -> [NSLayoutConstraint] {
-        expression
+    public static func buildExpression(_ constraint: NSLayoutConstraint) -> [any LayoutConstraintDefinition] {
+        [PredefinedConstraints([constraint])]
     }
 
-    // MARK: Support 'if' statements that do not have an 'else'
-
-    public static func buildOptional(_ components: [NSLayoutConstraint]?) -> [NSLayoutConstraint] {
-        components ?? []
+    public static func buildExpression(_ constraints: [NSLayoutConstraint]) -> [any LayoutConstraintDefinition] {
+        [PredefinedConstraints(constraints)]
     }
 
-    // MARK: Support 'if-else' and 'switch' statements
-
-    public static func buildEither(first components: [NSLayoutConstraint]) -> [NSLayoutConstraint] {
-        components
+    public static func buildFinalResult(_ definitions: [any LayoutConstraintDefinition]) -> [NSLayoutConstraint] {
+        definitions.flatMap(\.constraints)
     }
 
-    public static func buildEither(second components: [NSLayoutConstraint]) -> [NSLayoutConstraint] {
-        components
+    public static func buildEither(first definitions: [any LayoutConstraintDefinition]) -> [any LayoutConstraintDefinition] {
+        definitions
     }
 
-    // MARK: Support for 'for..in' loops
-
-    public static func buildArray(_ components: [[NSLayoutConstraint]]) -> [NSLayoutConstraint] {
-        components.flatMap { $0 }
+    public static func buildEither(second definitions: [any LayoutConstraintDefinition]) -> [any LayoutConstraintDefinition] {
+        definitions
     }
 
-    // MARK: Support for 'if #available' statements
+    public static func buildArray(_ definitions: [[LayoutConstraintDefinition]]) -> [LayoutConstraintDefinition] {
+        definitions.flatMap { $0 }
+    }
 
-    public static func buildLimitedAvailability(_ components: [NSLayoutConstraint]) -> [NSLayoutConstraint] {
-        components
+    public static func buildOptional(_ definitions: [LayoutConstraintDefinition]?) -> [LayoutConstraintDefinition] {
+        definitions ?? []
+    }
+
+    public static func buildLimitedAvailability(_ definitions: [LayoutConstraintDefinition]) -> [LayoutConstraintDefinition] {
+        definitions
     }
 }
